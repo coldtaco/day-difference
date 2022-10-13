@@ -19,22 +19,22 @@ class TestDateDiff(unittest.TestCase):
         d1 = Date(1, 1, 1900)
         d2 = Date(2, 1, 1900)
 
-        self.assertTrue(d1 > d2)
-        self.assertFalse(d1 < d2)
+        self.assertTrue(d1 < d2)
+        self.assertFalse(d1 > d2)
 
     def test_compare_month(self):
         d1 = Date(2, 1, 1900)
         d2 = Date(1, 2, 1900)
 
-        self.assertTrue(d1 > d2)
-        self.assertFalse(d1 < d2)
+        self.assertFalse(d1 > d2)
+        self.assertTrue(d1 < d2)
 
     def test_compare_year(self):
         d1 = Date(31, 1, 1900)
         d2 = Date(1, 1, 1901)
 
-        self.assertTrue(d1 > d2)
-        self.assertFalse(d1 < d2)
+        self.assertFalse(d1 > d2)
+        self.assertTrue(d1 < d2)
 
 if __name__ == '__main__':
     unittest.main()
