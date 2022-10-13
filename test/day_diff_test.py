@@ -3,6 +3,11 @@ from src.date_diff import date_diff, Date
 
 class TestDateDiff(unittest.TestCase):
 
+    def test_diff_date_simple(self):
+        d1 = Date(1, 1, 1900)
+        d2 = Date(2, 1, 1900)
+        self.assertEqual(d1 - d2, -1)
+
     def test_same(self):
         out = date_diff("01 01 1900, 01 01 1900")
         self.assertEqual(out, '01 01 1900, 01 01 1900, 0')
@@ -35,6 +40,14 @@ class TestDateDiff(unittest.TestCase):
 
         self.assertFalse(d1 > d2)
         self.assertTrue(d1 < d2)
+
+    def test_compare_equal(self):
+        d1 = Date(1, 1, 1900)
+        d2 = Date(1, 1, 1900)
+
+        self.assertFalse(d1 > d2)
+        self.assertFalse(d1 < d2)
+        self.assertEqual(d1, d2)
 
 if __name__ == '__main__':
     unittest.main()
