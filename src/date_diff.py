@@ -63,20 +63,7 @@ class Date:
 
         day_diff = other.day - self.day
 
-        while other.year - self.year > 4:
-            # Day difference for 4 years, include leap year
-            day_diff += 365*3 + 366
-            self.year += 4
-
-        # Difference is less than 4 years, check if years are leap
-        while self.year < other.year:
-            leap_year = Date.is_leap_year(self.year)
-            if leap_year:
-                day_diff += 366
-            else:
-                day_diff += 365
-            self.year += 1
-
+        # Move self month closer to other month to the right (future)
         while self.month < other.month:
             if self.month == 2 and Date.is_leap_year(self.year):
                 day_diff += 29
@@ -84,22 +71,47 @@ class Date:
                 day_diff += DAYS_PER_MONTH[self.month]
 
             self.month += 1
+
+        # Move self month closer to other month to the left (past)
+        while self.month > other.month:
+            self.month -= 1
+
+            if self.month == 2 and Date.is_leap_year(self.year):
+                day_diff -= 29
+            else:
+                day_diff -= DAYS_PER_MONTH[self.month]
+
+        # Move self year to other year to from the 
+        while self.year < other.year:
+            if self.month <= 2:
+                leap_year = Date.is_leap_year(self.year)
+            else:
+                leap_year = Date.is_leap_year(self.year + 1)
+            if leap_year:
+                day_diff += 366
+            else:
+                day_diff += 365
+            self.year += 1
         
         return - day_diff
         
 
     @staticmethod
     def is_leap_year(year):
-        if year % 400:
+        if year % 400 == 0:
+            print(year, 1)
             return True
         # Only century year
-        elif year % 100:
+        elif year % 100 == 0:
+            print(year, 2)
             return False
         # Leap year
-        elif year % 4:
+        elif year % 4 == 0:
+            print(year, 3)
             return True
         # Non leap year
         else:
+            print(year, 4)
             return False
 
 
