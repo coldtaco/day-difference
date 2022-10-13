@@ -51,12 +51,57 @@ class Date:
         # Same month
         return self.day < other.day
 
-    def __sub__(self, other:Date):
+    def __sub__(self, other:Date) -> int:
         """
-            Returns date difference of two dates, assumes
-            other date is in the future compared to this date
+            Returns date difference of two dates
         """
-        pass
+        # Assume other is larger than self
+        # Move other closer to self
+        if self >  other:
+            return (other - self)
+        other = other.__copy__() # Make copy so operations dont override
+
+        day_diff = other.day - self.day
+
+        while other.year - self.year > 4:
+            # Day difference for 4 years, include leap year
+            day_diff += 365*3 + 366
+            other.year -= 4
+
+        # Difference is less than 4 years, check if years are leap
+        while other.year > self.year:
+            leap_year = Date.is_leap_year(other.year)
+            if leap_year:
+                day_diff += 366
+            else:
+                day_diff += 365
+            other.year -= 1
+
+        while other.month > self.month:
+            if other.month == 2 and Date.is_leap_year(other.year):
+                day_diff += 29
+            else:
+                day_diff += DAYS_PER_MONTH[other.month]
+
+            other.month -= 1
+        
+        return - day_diff
+        
+
+    @staticmethod
+    def is_leap_year(year):
+        if year % 400:
+            return True
+        # Only century year
+        elif year % 100:
+            return False
+        # Leap year
+        elif year % 4:
+            return True
+        # Non leap year
+        else:
+            return False
+
 
     def __repr__(self) -> str:
         return f'{self.day} {self.month} {self.year}'
