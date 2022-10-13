@@ -18,6 +18,9 @@ DAYS_PER_MONTH = {
 
 
 class Date:
+    """
+        Date class, allows for computing day difference between two dates
+    """
     def __init__(self, day, month, year):
         self.day = day
         self.month = month
@@ -53,7 +56,8 @@ class Date:
 
     def __sub__(self, other:Date) -> int:
         """
-            Returns date difference of two dates
+            Returns day difference of two dates
+            returns negative day if other is smaller
         """
         # Assume other is larger than self
         # Move self closer to other
@@ -61,6 +65,7 @@ class Date:
             return - (other - self)
         self_cpy = self.__copy__() # Make copy so operations dont override
 
+        # Total day difference between dates, start from days
         day_diff = other.day - self_cpy.day
 
         # Move self month closer to other month to the right (future)
@@ -81,7 +86,10 @@ class Date:
             else:
                 day_diff -= DAYS_PER_MONTH[self_cpy.month]
 
-        # Move self year to other year to from the 
+        # Note: No need to check for past year like we did for month
+        # because year is guarenteed to be <= other year from check at the start
+
+        # Move self year to other year to the right (future)
         while self_cpy.year < other.year:
             if self_cpy.month <= 2:
                 leap_year = Date.is_leap_year(self_cpy.year)
@@ -94,7 +102,6 @@ class Date:
             self_cpy.year += 1
         
         return - day_diff
-        
 
     @staticmethod
     def is_leap_year(year):
@@ -110,15 +117,18 @@ class Date:
         else:
             return False
 
-
     def __repr__(self) -> str:
         return f'{self.day:02} {self.month:02} {self.year:04}'
-            
 
 
 def date_diff(dates):
     """
-        Given a string in format ''
+        Given a string in format 'DD MM YYYY, DD MM YYYY'
+        returns a string in format 'DD MM YYYY, DD MM YYYY, {day diff}'
+        where day diff is the number of days between the dates (positive integer)
+
+        Return string will place the earlier date before the later date
+        therefore order of dates maybe be swapped
     """
     date1, date2 = dates.split(', ')
 
