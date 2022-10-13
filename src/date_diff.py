@@ -1,4 +1,3 @@
-from matplotlib.dates import DAYS_PER_MONTH
 from __future__ import annotations
 
 DAYS_PER_MONTH = {
@@ -39,12 +38,28 @@ class Date:
         result.__dict__.update(self.__dict__)
         return result
 
+    def __lt__(self, other:Date):
+        if self.year > other.year:
+            return False
+        elif self.year < other.year:
+            return True
+        # Same year
+        if self.month > other.month:
+            return False
+        elif self.month < other.month:
+            return True
+        # Same month
+        return self.day < other.day
+
     def __sub__(self, other:Date):
         """
             Returns date difference of two dates, assumes
             other date is in the future compared to this date
         """
         pass
+
+    def __repr__(self) -> str:
+        return f'{self.day} {self.month} {self.year}'
             
 
 
