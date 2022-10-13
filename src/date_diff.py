@@ -56,9 +56,9 @@ class Date:
             Returns date difference of two dates
         """
         # Assume other is larger than self
-        # Move other closer to self
-        if self >  other:
-            return (other - self)
+        # Move self closer to other
+        if self > other:
+            return - (other - self)
         other = other.__copy__() # Make copy so operations dont override
 
         day_diff = other.day - self.day
@@ -66,24 +66,24 @@ class Date:
         while other.year - self.year > 4:
             # Day difference for 4 years, include leap year
             day_diff += 365*3 + 366
-            other.year -= 4
+            self.year += 4
 
         # Difference is less than 4 years, check if years are leap
-        while other.year > self.year:
-            leap_year = Date.is_leap_year(other.year)
+        while self.year < other.year:
+            leap_year = Date.is_leap_year(self.year)
             if leap_year:
                 day_diff += 366
             else:
                 day_diff += 365
-            other.year -= 1
+            self.year += 1
 
-        while other.month > self.month:
-            if other.month == 2 and Date.is_leap_year(other.year):
+        while self.month < other.month:
+            if self.month == 2 and Date.is_leap_year(self.year):
                 day_diff += 29
             else:
-                day_diff += DAYS_PER_MONTH[other.month]
+                day_diff += DAYS_PER_MONTH[self.month]
 
-            other.month -= 1
+            self.month += 1
         
         return - day_diff
         
