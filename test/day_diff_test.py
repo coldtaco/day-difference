@@ -6,7 +6,40 @@ class TestDateDiff(unittest.TestCase):
     def test_diff_date_simple(self):
         d1 = Date(1, 1, 1900)
         d2 = Date(2, 1, 1900)
+
         self.assertEqual(d1 - d2, -1)
+        self.assertEqual(d2 - d1, 1)
+
+    def test_diff_date_simple_month(self):
+        d1 = Date(1, 1, 1900)
+        d2 = Date(1, 2, 1900)
+        self.assertEqual(d2 - d1, 31)
+
+    def test_leap_year(self):
+        d1 = Date(1, 5, 1900)
+        d2 = Date(1, 5, 1904)
+        self.assertEqual(d2 - d1, 365 * 3 + 366)
+
+    def test_leap_year_2(self):
+        """
+            No leap year for 1900
+        """
+        d1 = Date(1, 1, 1900)
+        d2 = Date(1, 1, 1905)
+        self.assertEqual(d2 - d1, 365 * 4 + 366*1)
+
+    def test_leap_year_2(self):
+        """
+            Two leap years
+        """
+        d1 = Date(1, 1, 1904)
+        d2 = Date(1, 1, 1909)
+        self.assertEqual(d2 - d1, 365 * 3 + 366*2)
+
+    def test_year_diff(self):
+        d1 = Date(1, 5, 1900)
+        d2 = Date(1, 5, 1901)
+        self.assertEqual(d2 - d1, 365)
 
     def test_same(self):
         out = date_diff("01 01 1900, 01 01 1900")
