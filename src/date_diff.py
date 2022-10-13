@@ -59,39 +59,39 @@ class Date:
         # Move self closer to other
         if self > other:
             return - (other - self)
-        other = other.__copy__() # Make copy so operations dont override
+        self_cpy = self.__copy__() # Make copy so operations dont override
 
-        day_diff = other.day - self.day
+        day_diff = other.day - self_cpy.day
 
         # Move self month closer to other month to the right (future)
-        while self.month < other.month:
-            if self.month == 2 and Date.is_leap_year(self.year):
+        while self_cpy.month < other.month:
+            if self_cpy.month == 2 and Date.is_leap_year(self_cpy.year):
                 day_diff += 29
             else:
-                day_diff += DAYS_PER_MONTH[self.month]
+                day_diff += DAYS_PER_MONTH[self_cpy.month]
 
-            self.month += 1
+            self_cpy.month += 1
 
         # Move self month closer to other month to the left (past)
-        while self.month > other.month:
-            self.month -= 1
+        while self_cpy.month > other.month:
+            self_cpy.month -= 1
 
-            if self.month == 2 and Date.is_leap_year(self.year):
+            if self_cpy.month == 2 and Date.is_leap_year(self_cpy.year):
                 day_diff -= 29
             else:
-                day_diff -= DAYS_PER_MONTH[self.month]
+                day_diff -= DAYS_PER_MONTH[self_cpy.month]
 
         # Move self year to other year to from the 
-        while self.year < other.year:
-            if self.month <= 2:
-                leap_year = Date.is_leap_year(self.year)
+        while self_cpy.year < other.year:
+            if self_cpy.month <= 2:
+                leap_year = Date.is_leap_year(self_cpy.year)
             else:
-                leap_year = Date.is_leap_year(self.year + 1)
+                leap_year = Date.is_leap_year(self_cpy.year + 1)
             if leap_year:
                 day_diff += 366
             else:
                 day_diff += 365
-            self.year += 1
+            self_cpy.year += 1
         
         return - day_diff
         
@@ -99,24 +99,20 @@ class Date:
     @staticmethod
     def is_leap_year(year):
         if year % 400 == 0:
-            print(year, 1)
             return True
         # Only century year
         elif year % 100 == 0:
-            print(year, 2)
             return False
         # Leap year
         elif year % 4 == 0:
-            print(year, 3)
             return True
         # Non leap year
         else:
-            print(year, 4)
             return False
 
 
     def __repr__(self) -> str:
-        return f'{self.day} {self.month} {self.year}'
+        return f'{self.day:02} {self.month:02} {self.year:04}'
             
 
 
@@ -125,9 +121,17 @@ def date_diff(dates):
         Given a string in format ''
     """
     date1, date2 = dates.split(', ')
-    d1, m1, y1 = date1.split(' ')
-    d2, m2, y2 = date2.split(' ')
+
+    # Split date into day, month, year, convert all to int
+    d1, m1, y1 = [int(i) for i in date1.split(' ')]
+    d2, m2, y2 = [int(i) for i in date2.split(' ')]
 
     date1 = Date(d1, m1, y1)
     date2 = Date(d2, m2, y2)
 
+    if date2 < date1:
+        date2, date1 = date1, date2
+
+    diff = date2 - date1
+
+    return f'{date1}, {date2}, {diff}'
