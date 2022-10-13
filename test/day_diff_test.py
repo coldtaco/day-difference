@@ -36,6 +36,14 @@ class TestDateDiff(unittest.TestCase):
         d2 = Date(1, 1, 1909)
         self.assertEqual(d2 - d1, 365 * 3 + 366*2)
 
+    def test_m_d_larger(self):
+        """
+            Two leap years
+        """
+        d1 = Date(31, 12, 1900)
+        d2 = Date(1, 1, 1901)
+        self.assertEqual(d2 - d1, 1)
+
     def test_year_diff(self):
         d1 = Date(1, 5, 1900)
         d2 = Date(1, 5, 1901)
